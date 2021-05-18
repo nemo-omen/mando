@@ -1,5 +1,5 @@
 <script>
-  import { getContext, onMount } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
   import { fade, fly } from 'svelte/transition';
   import { quintInOut } from 'svelte/easing';
   import { connectionService } from '../machines/connection.machine.js';
@@ -60,7 +60,12 @@
   }
 
   function scaleInput() {
-    input.style.maxHeight = isConnected ? null : input.scrollHeight + "px";
+    input.style.maxHeight = $connectionService.value !== 'connected' ? input.scrollHeight + "px" : 0;
+    // if(!isConnected) {
+    //   input.style.maxHeight = input.scrollHeight + "px";
+    // } else {
+    //   input.style.maxHeight - 0;
+    // }
   }
 
   onMount(() => {
@@ -72,22 +77,22 @@
     if(savedAddress !== undefined || savedAddress !== null) {
       address = savedAddress;
     }
+    scaleInput();
+  });
 
+  afterUpdate(() => {
     scaleInput();
   });
 
   connectionService.onTransition((state) => {
     const value = state.value;
     isConnected = value === 'connected';
-    console.log('Connected?: ', isConnected);
 
     switch(value) {
       case 'inactive':
-        // scaleInput();
         break;
       case 'connected':
         saveAddresses();
-        scaleInput();
         break;
       case 'connection_failed':
         isAddressError = true;
@@ -98,7 +103,7 @@
         timeoutError('auth');
         break;
     }
-  })
+  });
 
 </script>
 
