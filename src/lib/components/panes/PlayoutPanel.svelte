@@ -30,17 +30,12 @@
     display: grid;
     background: var(--blackish-dark);
   }
-  /* .control-panel > * + * {
-    border-left: 1px solid var(--blackish-primary);
-  } */
   .control-pane {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
     justify-content: start;
     align-items: center;
     padding: 3rem;
-    /* align-items: center; */
   }
   .playout-display {
     max-height: 60vh;

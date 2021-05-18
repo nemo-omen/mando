@@ -60,12 +60,8 @@
   }
 
   function scaleInput() {
-    input.style.maxHeight = $connectionService.value !== 'connected' ? input.scrollHeight + "px" : 0;
-    // if(!isConnected) {
-    //   input.style.maxHeight = input.scrollHeight + "px";
-    // } else {
-    //   input.style.maxHeight - 0;
-    // }
+    input.style.maxHeight = $connectionService.value !== 'connected' ? (input.scrollHeight) + "px" : 0;
+    input.style.padding = $connectionService.value !== 'connected' ? (0.5) + "rem" : 0;
   }
 
   onMount(() => {
@@ -124,8 +120,8 @@
       <datalist id="address-history">
         {#each addressHistory as address}
         <option value={address}>
-          {/each}
-        </datalist>
+        {/each}
+      </datalist>
         
         <input
         type="password"
@@ -137,7 +133,7 @@
         bind:value={password} >
       </div>
         
-      <button class={$connectionService.value.toString()}>
+      <button class="{$connectionService.value.toString()} {$connectionService.value === 'connected' ? 'scaled' : ''}">
         {#if $connectionService.matches('inactive')}
         Connect
         {:else if $connectionService.matches('connected')}
@@ -167,30 +163,22 @@
     --border: 1px solid var(--secondary-darker);
     --borderFocusColor: var(--secondary-dark);
     --background: var(--blackish-light);
-  }
-  .control-horizontal {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-areas: "info control";
-    gap: 2rem;
-    align-items: center;
+    margin-top: 1rem;
   }
   .vertical {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
   }
   .horizontal {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    /* grid-template-columns: repeat(3, 1fr); */
   }
-
   .input-group {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 300ms ease-out;
+    transition: max-height 300ms ease-out, padding 300ms ease-out;
+    padding: 0 0.25rem;
   }
 
   .input-group > * + * {
@@ -201,13 +189,9 @@
     border-top: 1px solid var(--secondary-darker);
     padding-top: 1rem;
   }
-  form {
-    display: grid;
-    grid-template-columns: 4fr 1fr;
-    grid-template-areas: "input submit";
-    grid-gap: 1rem;
-    padding: 0.25rem;
-    grid-area: control;
+
+  form > * + * {
+    margin-top: 1rem;
   }
 
   .control-input {
@@ -224,6 +208,13 @@
   button {
     width: 100%;
     padding: 0.5rem 0;
+    transform-origin: top center;
+    transition: all 300ms ease-out;
+    margin: 1rem auto;
+  }
+  .scaled {
+    width: 70%;
+    margin-top: 0;
   }
   .connected {
     background-color: var(--secondary-darker);
