@@ -60,8 +60,9 @@
   }
 
   function scaleInput() {
-    input.style.maxHeight = $connectionService.value !== 'connected' ? (input.scrollHeight) + "px" : 0;
-    input.style.padding = $connectionService.value !== 'connected' ? (0.5) + "rem" : 0;
+    input.style.maxHeight = $connectionService.value !== 'connected' ? (input.scrollHeight + 16) + "px" : 0;
+    input.style.paddingTop = $connectionService.value !== 'connected' ? (0.5) + "rem" : 0;
+    input.style.paddingBottom = $connectionService.value !== 'connected' ? (0.5) + "rem" : 0;
   }
 
   onMount(() => {
@@ -178,7 +179,7 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 300ms ease-out, padding 300ms ease-out;
-    padding: 0 0.25rem;
+    padding: 0 2px;
   }
 
   .input-group > * + * {
