@@ -13,7 +13,9 @@
 
   let addressHistory = [];
   
-  const obs = getContext('obs');
+  let input;
+
+  let isConnected = false;
   
   $: isAuthError = false;
   $: isAddressError = false;
@@ -57,6 +59,10 @@
     window.localStorage.setItem('addressHistory', JSON.stringify(addressHistory));
   }
 
+  function scaleInput() {
+    input.style.maxHeight = isConnected ? null : input.scrollHeight + "px";
+  }
+
   onMount(() => {
     savedAddress = window.localStorage.getItem('lastAddress');
     let lsHistory = JSON.parse(window.localStorage.getItem('addressHistory'));
@@ -66,17 +72,22 @@
     if(savedAddress !== undefined || savedAddress !== null) {
       address = savedAddress;
     }
+
+    scaleInput();
   });
 
   connectionService.onTransition((state) => {
     const value = state.value;
-    console.log(value);
+    isConnected = value === 'connected';
+    console.log('Connected?: ', isConnected);
 
     switch(value) {
-      case 'idle':
+      case 'inactive':
+        // scaleInput();
         break;
       case 'connected':
         saveAddresses();
+        scaleInput();
         break;
       case 'connection_failed':
         isAddressError = true;
@@ -92,25 +103,26 @@
 </script>
 
 <section class="control vertical">
-
+  
   <form on:submit|preventDefault={connectionToggle} class="vertical">
+    <div class="input-group" bind:this={input}>
       <input 
-        id="address-input"
-        class={isAddressError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}
-        type="text" 
-        list="address-history" 
-        placeholder="Address (localhost:4444)"
-        bind:value={address} 
-        in:fade={{duration: 200, delay: 300, easing: quintInOut}}
-        out:fade={{duration: 200, easing: quintInOut}} >
-
+      id="address-input"
+      class={isAddressError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}
+      type="text" 
+      list="address-history" 
+      placeholder="Address (localhost:4444)"
+      bind:value={address} 
+      in:fade={{duration: 200, delay: 300, easing: quintInOut}}
+      out:fade={{duration: 200, easing: quintInOut}} >
+      
       <datalist id="address-history">
         {#each addressHistory as address}
         <option value={address}>
           {/each}
-      </datalist>
-
-      <input 
+        </datalist>
+        
+        <input
         type="password"
         id="password-input" 
         class={isAuthError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}
@@ -118,7 +130,8 @@
         in:fade={{duration: 200, delay: 300, easing: quintInOut}} 
         out:fade={{duration: 200, easing: quintInOut}} 
         bind:value={password} >
-
+      </div>
+        
       <button class={$connectionService.value.toString()}>
         {#if $connectionService.matches('inactive')}
         Connect
@@ -167,6 +180,16 @@
     justify-content: space-between;
     gap: 1rem;
     /* grid-template-columns: repeat(3, 1fr); */
+  }
+
+  .input-group {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms ease-out;
+  }
+
+  .input-group > * + * {
+    margin-top: 1rem;
   }
 
   .system-info {

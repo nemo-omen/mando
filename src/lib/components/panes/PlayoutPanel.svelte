@@ -30,9 +30,9 @@
     display: grid;
     background: var(--blackish-dark);
   }
-  .control-panel > * + * {
+  /* .control-panel > * + * {
     border-left: 1px solid var(--blackish-primary);
-  }
+  } */
   .control-pane {
     display: flex;
     flex-direction: column;

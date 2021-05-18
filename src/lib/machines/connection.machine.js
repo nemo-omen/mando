@@ -63,6 +63,7 @@ const connectionMachine = Machine({
         if(event.type === 'DISCONNECT') {
           console.log("Disconnecting...");
           obs.disconnect();
+          send('DISCONNECTED');
         }
       });
     }
