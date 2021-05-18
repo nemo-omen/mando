@@ -5,13 +5,13 @@
 </script>
 
 <div class="stat-display" in:fade={{duration: 200, delay: 300}} out:fade={{duration: 200}}>
-  <p class="stat">{stat}</p>
   <p class="stat-label">{statName}</p>
+  <p class="stat">{stat}</p>
 </div>
 
 <style>
   .stat-display {
-    text-align: end;
+    text-align: start;
   }
   .stat-display > * + * {
     margin-top: 0.25rem;

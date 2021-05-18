@@ -62,6 +62,7 @@
     display: flex;
     justify-content: space-between;
     cursor: pointer;
+    padding: 0.25rem;
   }
   .scene-card:hover {
     background-color: var(--blackish-light);
@@ -69,22 +70,6 @@
   }
   .scene-card:active {
     background-color: var(--blackish-lighter);
-  }
-  .scene-card > * {
-    padding: 0.5rem;
-  }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem;
-  }
-  .card-body {
-    padding: 0;
-  }
-  .card-footer {
-    height: 2rem;
-    background-color: var(--blackish-dark);
   }
   .program {
     background-color: var(--blackish-tertiary);

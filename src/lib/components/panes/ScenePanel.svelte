@@ -19,9 +19,9 @@
 
 <style>
   .scene-panel {
-    padding: 1rem;
+    padding: 0.5rem;
 	}
   :global(.scene-panel > * + *) {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 </style>

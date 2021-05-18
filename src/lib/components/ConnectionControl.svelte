@@ -91,27 +91,34 @@
 
 </script>
 
-<section class="control-horizontal">
-  {#if $connectionService.matches('connected')}
-    <div class="system-info">
-      {#if $stats["cpu-usage"] !== undefined}
-      <SystemInfo stat={$stats["cpu-usage"].toFixed(2) + "%"} statName="CPU" />
-      <SystemInfo stat={$stats["memory-usage"].toFixed(2) + "MB"} statName="MEM" />
-      <SystemInfo stat={$stats["fps"].toFixed(2)} statName="FPS" />
-      {/if}
-    </div>
-  {/if}
-  <form on:submit|preventDefault={connectionToggle}>
-    <section class="control-input">
-        <input in:fade={{duration: 200, delay: 300, easing: quintInOut}} out:fade={{duration: 200, easing: quintInOut}} type="text" bind:value={address} list="address-history" class={isAddressError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}>
-        <datalist id="address-history">
-          {#each addressHistory as address}
-          <option value={address}>
-            {/each}
-          </datalist>
-          <input in:fade={{duration: 200, delay: 300, easing: quintInOut}} out:fade={{duration: 200, easing: quintInOut}} type="password" placeholder="Password" bind:value={password} class={isAuthError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}>
-    </section>
-    <section class="control-submit">
+<section class="control vertical">
+
+  <form on:submit|preventDefault={connectionToggle} class="vertical">
+      <input 
+        id="address-input"
+        class={isAddressError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}
+        type="text" 
+        list="address-history" 
+        placeholder="Address (localhost:4444)"
+        bind:value={address} 
+        in:fade={{duration: 200, delay: 300, easing: quintInOut}}
+        out:fade={{duration: 200, easing: quintInOut}} >
+
+      <datalist id="address-history">
+        {#each addressHistory as address}
+        <option value={address}>
+          {/each}
+      </datalist>
+
+      <input 
+        type="password"
+        id="password-input" 
+        class={isAuthError ? 'error' : ''} disabled={$connectionService.value === 'connected' ? true : undefined}
+        placeholder="Password" 
+        in:fade={{duration: 200, delay: 300, easing: quintInOut}} 
+        out:fade={{duration: 200, easing: quintInOut}} 
+        bind:value={password} >
+
       <button class={$connectionService.value.toString()}>
         {#if $connectionService.matches('inactive')}
         Connect
@@ -121,20 +128,50 @@
         Failed
         {/if}
       </button>
-    </section>
+
     </form>
+
+    {#if $connectionService.matches('connected')}
+    <div class="system-info horizontal">
+      {#if $stats["cpu-usage"] !== undefined}
+      <SystemInfo stat={$stats["cpu-usage"].toFixed(2) + "%"} statName="CPU" />
+      <!-- <SystemInfo stat={$stats["memory-usage"].toFixed(2) + "MB"} statName="MEM" /> -->
+      <SystemInfo stat={$stats["fps"].toFixed(2)} statName="FPS" />
+      {/if}
+    </div>
+    {/if}
+
   </section>
 
+
 <style>
-  .control-horizontal {
+  .control {
     --border: 1px solid var(--secondary-darker);
     --borderFocusColor: var(--secondary-dark);
     --background: var(--blackish-light);
+  }
+  .control-horizontal {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas: "info control";
     gap: 2rem;
     align-items: center;
+  }
+  .vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .horizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    /* grid-template-columns: repeat(3, 1fr); */
+  }
+
+  .system-info {
+    border-top: 1px solid var(--secondary-darker);
+    padding-top: 1rem;
   }
   form {
     display: grid;
@@ -151,12 +188,6 @@
     gap: 1rem;
     grid-area: input;
   }
-  
-  .system-info {
-    grid-area: info;
-    display: flex;
-    gap: 1rem;
-  }
   .control-submit {
     display: flex;
     grid-area: submit;
@@ -164,6 +195,7 @@
   }
   button {
     width: 100%;
+    padding: 0.5rem 0;
   }
   .connected {
     background-color: var(--secondary-darker);

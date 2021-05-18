@@ -5,7 +5,7 @@
   import ControlPanel from '$lib/components/panes/ControlPanel.svelte';
 </script>
 
-<Header />
+<!-- <Header /> -->
 
 <main>
   <PlayoutPanel />
@@ -15,7 +15,7 @@
 <style>
   main {
 		display: grid;
-		grid-template-rows: 2fr 1fr;
+		grid-template-rows: 65vh 35vh;
     min-height: 100%;
 	}
 

@@ -1,4 +1,6 @@
 <script>
+  import ConnectionControl from '../ConnectionControl.svelte';
+  import Logo from '../Logo.svelte';
   let studioMode = true;
 </script>
 
@@ -7,7 +9,10 @@
     <section id="preview" class="control-pane">
       <div class="playout-display"></div>
     </section>
-    <section id="transition" class="control-pane"></section>
+    <section id="transition" class="control-pane">
+      <Logo />
+      <ConnectionControl />
+    </section>
     <section id="program" class="control-pane">
       <div class="playout-display"></div>
     </section>
@@ -20,6 +25,7 @@
 
 <style>
   .control-panel {
+    max-height: 65vh;
     position: relative;
     display: grid;
     background: var(--blackish-dark);
@@ -29,7 +35,10 @@
   }
   .control-pane {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 3rem;
+    justify-content: start;
+    align-items: center;
     padding: 3rem;
     /* align-items: center; */
   }
