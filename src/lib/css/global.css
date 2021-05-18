@@ -1,0 +1,99 @@
+@import url('./reset.css');
+
+/* VARS! */
+:root {
+  --font-size: 16px;
+  --font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+  Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+  --primary-light: #ff8e7a;
+  --primary: #ff6347;
+  --primary-dark: #df4e35;
+  --primary-darker: #c5412a;
+  
+  --secondary-light: #6dc4c1;
+  --secondary: #59a7a4;
+  --secondary-dark: #48918e;
+  --secondary-darker: #347573;
+  
+  --tertiary-light: #6b77ff;
+  --tertiary: #5967ff;
+  --tertiary-dark: #4350e2;
+  --tertiary-darker: #3541c2;
+  
+  --blackish-lighter: #30303b;
+  --blackish-light: #292935;
+  --blackish: #19191f;
+  --blackish-dark: #131318;
+  --blackish-darker: #0a0a0e;
+  --blackish-warn: #3d0e05;
+
+  --blackish-primary: #381610;
+  --blackish-secondary-light: #295351;
+  --blackish-secondary-lighter: #2f5e5b;
+  --blackish-secondary: #224745;
+  --blackish-tertiary-light: #2c2f5a;
+  --blackish-tertiary-lighter: #323564;
+  --blackish-tertiary: #262952;
+  
+  --whitish-light: hsl(0, 100%, 100%);
+  --whitish: hsl(0, 100%, 97%);
+  --whitish-dark: hsl(0, 100%, 87%);
+  --whitish-darker: hsl(0, 19%, 66%);
+  --whitish-warn: #ff8e7a;
+
+  --gray-dark: hsl(240, 5%, 29%);
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: 500;
+  letter-spacing: 1px;
+  background-color: var(--blackish);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  color: var(--whitish);
+}
+
+input {
+  background-color: var(--blackish-light);
+  color: var(--whitish-dark);
+  padding: 0.5rem;
+  border: none;
+  outline: 1px solid var(--secondary-darker);
+  transition: outline 200ms ease-out, background 200ms ease-out;
+}
+
+input:disabled {
+  background: var(--blackish);
+  color: var(--gray-dark);
+  outline: 1px solid var(--blackish-light);
+}
+
+input:focus {
+  background-color: var(--blackish);
+  outline: 1px solid var(--secondary-dark);
+  color: var(--whitish-light);
+}
+
+button {
+  outline: 1px solid var(--secondary-darker);
+  border: none;
+  background: var(--blackish);
+  color: var(--whitish);
+  padding: 0 0.5rem;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+}
+
+button:hover {
+  background: var(--blackish-light);
+  outline: 1px solid var(--secondary-dark);
+  color: var(--whitish-light);
+}
+
+button:active {
+  color: var(--secondary);
+  outline: 1px solid var(--secondary);
+}
