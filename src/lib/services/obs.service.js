@@ -9,6 +9,7 @@ export let stats = writable({});
 export let sceneList = writable([]);
 export let currentScene = writable({});
 export let previewScene = writable({});
+export let sourceTypeNames = writable([]);
 
 let pollingInterval = undefined;
 
@@ -16,6 +17,7 @@ function initData() {
   startStatPolling();
   getScenes();
   checkSceneState();
+  getSourceTypes();
 }
 
 function getScenes() {
@@ -45,6 +47,20 @@ function pollStats() {
   .catch((error) => {
     console.error(error);
   });
+}
+
+async function getSourceTypes() {
+  const data = await obs.send('GetSourceTypesList');
+  const types = await data.types;
+  // console.log(types);
+  const cleanTypes = types.map((type) => {
+    return {
+      name: type.typeId,
+      displayName: type.displayName,
+    }
+  });
+  sourceTypeNames.set([...cleanTypes]);
+  console.log(get(sourceTypeNames));
 }
 
 obs.on('ConnectionOpened', async (data) => {

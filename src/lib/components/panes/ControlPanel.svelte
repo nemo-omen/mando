@@ -5,15 +5,15 @@
 
 <section class="control">
 
-  <section class="scenes control-pane">
+  <section class="scenes control-pane scroll">
     <ScenePanel />
   </section>
 
-  <section class="control-pane">
+  <section class="control-pane scroll">
     <SourcePanel />
   </section>
-  <section class="control-pane"></section>
-  <section class="control-pane"></section>
+  <section class="control-pane scroll"></section>
+  <section class="control-pane scroll"></section>
 </section>
 
 <style>
@@ -21,14 +21,9 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border-top: 1px solid var(--primary-darker);
-    overflow: hidden;
     max-height: 35vh;
-  }
-  .control > * + * {
-    border-left: 1px solid var(--primary-darker);
   }
   .control-pane {
     height: 100%;
-    overflow-y: scroll;
   }
 </style>

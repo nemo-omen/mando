@@ -18,5 +18,4 @@
 		grid-template-rows: 65vh 35vh;
     min-height: 100%;
 	}
-
 </style>

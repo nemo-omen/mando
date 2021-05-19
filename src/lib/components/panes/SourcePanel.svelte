@@ -1,14 +1,26 @@
 <script>
+  import { fade, fly, slide } from 'svelte/transition';
+  import { quintInOut } from 'svelte/easing';
   import { previewScene } from '../../services/obs.service.js';
   import { connectionService } from '../../machines/connection.machine.js';
-  import { fly } from 'svelte/transition';
-  import { quintInOut } from 'svelte/easing';
-  // console.log("Selected scene sources", $previewScene.sources);
+  import SourceCard from '../SourceCard.svelte';
 </script>
-{#if $connectionService.matches('connected') && $previewScene.sources !== null && $previewScene.sources !== undefined}
+<section class="source-panel">
+
+  {#if $connectionService.matches('connected') && $previewScene.sources !== null && $previewScene.sources !== undefined}
   {#each $previewScene.sources as source}
-    <article class="source-card" in:fly={{y: 2000, duration: 300, delay: 300, easing: quintInOut}} out:fly={{y: 2000, duration: 200, easing: quintInOut}}>
-      <p>{source.name}</p>
-    </article>
+  <div transition:fly={{y: 2000, duration: 600, easing: quintInOut}}>
+    <SourceCard {source} />
+  </div>
   {/each}
-{/if}
+  {/if}
+</section>
+
+<style>
+  .source-panel {
+    padding: 0.5rem;
+  }
+  .source-panel > * + * {
+    margin-top: 0.5rem;
+  }
+</style>

@@ -61,8 +61,9 @@
     transition: all 300ms ease-in-out;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0.25rem 0.5rem;
   }
   .scene-card:hover {
     background-color: var(--blackish-light);

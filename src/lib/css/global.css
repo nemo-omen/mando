@@ -97,3 +97,10 @@ button:active {
   color: var(--secondary);
   outline: 1px solid var(--secondary);
 }
+
+.scroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: auto;
+  scrollbar-color: var(--primary);
+}
