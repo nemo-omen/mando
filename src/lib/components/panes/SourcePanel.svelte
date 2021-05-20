@@ -9,7 +9,7 @@
 
   {#if $connectionService.matches('connected') && $previewScene.sources !== null && $previewScene.sources !== undefined}
   {#each $previewScene.sources as source}
-  <div transition:fly={{y: 2000, duration: 600, easing: quintInOut}}>
+  <div>
     <SourceCard {source} />
   </div>
   {/each}

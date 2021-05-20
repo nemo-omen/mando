@@ -27,10 +27,7 @@
 
   function setSelected() {
     selected = !selected;
-
-    if(selected) {
-      selectedScene.set(scene);
-    }
+    // selectedScene.set(scene);
   }
 
   onMount(async () => {
@@ -45,7 +42,7 @@
   transition:fly={{y: 2000, duration: 600, easing: quintInOut}}
   on:click={handleSceneClick}
   >
-  <h3>{scene.name}</h3>
+  <h4>{scene.name}</h4>
   <div class="icon {isPreview ? 'icon-preview' : isProgram ? 'icon-program' : 'icon-idle'}">
     {#if isProgram}
     <Icon name="eye" />

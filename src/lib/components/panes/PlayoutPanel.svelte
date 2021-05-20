@@ -1,4 +1,6 @@
 <script>
+  import { scale } from 'svelte/transition';
+  import { connectionService } from '../../machines/connection.machine.js';
   import ConnectionControl from '../ConnectionControl.svelte';
   import Logo from '../Logo.svelte';
   let studioMode = true;
@@ -6,19 +8,23 @@
 
 <section class="control-panel" style="{studioMode ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-rows: 1fr'}">
   {#if studioMode}
-    <section id="preview" class="control-pane">
-      <div class="playout-display"></div>
+  <section id="preview" class="control-pane">
+      {#if $connectionService.matches('connected')}
+      <div class="playout-display" transition:scale></div>
+      {/if}
     </section>
     <section id="transition" class="control-pane">
       <Logo />
       <ConnectionControl />
     </section>
     <section id="program" class="control-pane">
-      <div class="playout-display"></div>
+      {#if $connectionService.matches('connected')}
+      <div class="playout-display" transition:scale></div>
+      {/if}
     </section>
   {:else}
     <section id="program" class="control-pane vertical">
-      <div class="playout-display"></div>
+      <div class="playout-display" transition:scale></div>
     </section>
     {/if}
 </section>
@@ -38,7 +44,7 @@
     padding: 3rem;
   }
   .playout-display {
-    max-height: 60vh;
+    height: 40vh;
     background-color: var(--blackish-darker);
     aspect-ratio: 16 / 9;
   }

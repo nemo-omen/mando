@@ -60,7 +60,7 @@ async function getSourceTypes() {
     }
   });
   sourceTypeNames.set([...cleanTypes]);
-  console.log(get(sourceTypeNames));
+  // console.log(get(sourceTypeNames));
 }
 
 obs.on('ConnectionOpened', async (data) => {
@@ -95,7 +95,12 @@ async function checkProgram() {
 
 async function checkPreview() {
   const preview = await obs.send('GetPreviewScene');
-  previewScene.set({name: preview.name, sources: [...preview.sources]});
+  previewScene.set({});
+
+  // timeout delay to allow source ui elements to transition out
+  setTimeout(() => {
+    previewScene.set({name: preview.name, sources: [...preview.sources]});
+  }, 300);
 }
 
 obs.on('ConnectionClosed', () => {
