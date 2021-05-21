@@ -52,22 +52,30 @@ function pollStats() {
   });
 }
 
-export function startScreenshotPolling(role) {
-  SetInterval.start(() => pollScreenshots(role), 50, `${role}-screenshot-polling`);
-  // pollScreenshots(role)
+export async function startScreenshotPolling(role) {
+  const versionData = await obs.send('GetVersion');
+  console.log(versionData);
+  const formats = await versionData["supported-image-export-formats"];
+  console.log(formats);
+  if(formats.includes('jpg')) {
+    SetInterval.start(() => pollScreenshots(role, 'jpg'), 50, `${role}-screenshot-polling`);
+  }else {
+    SetInterval.start(() => pollScreenshots(role, 'png'), 50, `${role}-screenshot-polling`);
+  }
+  pollScreenshots(role)
 }
 
 export function stopScreenshotPolling(role) {
   SetInterval.clear(`${role}-screenshot-polling`);
 }
 
-async function pollScreenshots(role) {
+async function pollScreenshots(role, format) {
   if(role === 'preview') {
     const preview = get(previewScene);
     const data = await obs.send('TakeSourceScreenshot', 
       {
         sourceName: preview.name,
-        embedPictureFormat: 'jpg',
+        embedPictureFormat: format,
         compressionQuality: 25,
         width: 640,
         height: 360
@@ -78,7 +86,7 @@ async function pollScreenshots(role) {
     const data = await obs.send('TakeSourceScreenshot', 
       {
         // sourceName: program.name,
-        embedPictureFormat: 'jpg',
+        embedPictureFormat: format,
         compressionQuality: 25,
         width: 640,
         height: 360
