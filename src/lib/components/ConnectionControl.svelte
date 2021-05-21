@@ -4,7 +4,7 @@
   import { quintInOut } from 'svelte/easing';
   import { connectionService } from '../machines/connection.machine.js';
   import { stats } from '../services/obs.service.js';
-  import SystemInfo from './SystemInfo.svelte';
+  // import SystemInfo from './SystemInfo.svelte';
 
   let address = "";
   let password = "";
@@ -146,15 +146,14 @@
 
     </form>
 
-    {#if $connectionService.matches('connected')}
+    <!-- {#if $connectionService.matches('connected')}
     <div class="system-info horizontal">
       {#if $stats["cpu-usage"] !== undefined}
       <SystemInfo stat={$stats["cpu-usage"].toFixed(2) + "%"} statName="CPU" />
-      <!-- <SystemInfo stat={$stats["memory-usage"].toFixed(2) + "MB"} statName="MEM" /> -->
       <SystemInfo stat={$stats["fps"].toFixed(2)} statName="FPS" />
       {/if}
     </div>
-    {/if}
+    {/if} -->
 
   </section>
 

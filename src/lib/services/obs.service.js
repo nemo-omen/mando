@@ -21,7 +21,7 @@ function initData() {
   getScenes();
   checkSceneState();
   getSourceTypes();
-  obs.send('GetVersion').then((data) => console.log(data)).catch((error) => console.error(error));
+  // obs.send('GetVersion').then((data) => console.log(data)).catch((error) => console.error(error));
 }
 
 function getScenes() {
@@ -73,17 +73,19 @@ async function pollScreenshots(role) {
         height: 360
       });
     previewScreenshot.set(await data.img);
-  } else {
+  } else if(role === 'program') {
     const program = get(currentScene);
     const data = await obs.send('TakeSourceScreenshot', 
       {
-        sourceName: program.name,
+        // sourceName: program.name,
         embedPictureFormat: 'jpg',
         compressionQuality: 25,
         width: 640,
         height: 360
       });
     programScreenshot.set(await data.img);
+  } else {
+    return '';
   }
 }
 
@@ -99,6 +101,29 @@ async function getSourceTypes() {
     }
   });
   sourceTypeNames.set([...cleanTypes]);
+}
+
+export async function checkSceneState() {
+  checkProgram();
+  checkPreview();
+}
+
+async function checkProgram() {
+  const program = await obs.send('GetCurrentScene');
+  currentScene.set({name: program.name, sources: [...program.sources]});
+  console.log('Current scene: ', get(currentScene));
+}
+
+async function checkPreview() {
+  const preview = await obs.send('GetPreviewScene');
+
+  // set store to empty object to clear ui objects
+  previewScene.set({});
+
+  // timeout delay to allow source ui elements to transition out
+  setTimeout(() => {
+    previewScene.set({name: preview.name, sources: [...preview.sources]});
+  }, 300);
 }
 
 obs.on('ConnectionOpened', async (data) => {
@@ -119,28 +144,6 @@ obs.on('ConnectionOpened', async (data) => {
     initData();
   }
 });
-
-export async function checkSceneState() {
-  checkProgram();
-  checkPreview();
-}
-
-async function checkProgram() {
-  const program = await obs.send('GetCurrentScene');
-  currentScene.set({name: program.name, sources: [...program.sources]});
-}
-
-async function checkPreview() {
-  const preview = await obs.send('GetPreviewScene');
-
-  // set store to empty object to clear ui objects
-  previewScene.set({});
-
-  // timeout delay to allow source ui elements to transition out
-  setTimeout(() => {
-    previewScene.set({name: preview.name, sources: [...preview.sources]});
-  }, 300);
-}
 
 obs.on('ConnectionClosed', () => {
   stopStatPolling();

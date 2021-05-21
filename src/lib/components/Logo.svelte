@@ -1,4 +1,7 @@
-<div class="logo">
+<script>
+  import { connectionService } from '../machines/connection.machine.js';
+</script>
+<div class="logo {$connectionService.matches('connected') ? 'small' : ''}">
 
 
   <svg viewBox="0 0 690 690" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,8 +47,13 @@
     .logo {
       height: var(--logo-size);
       height: 8vh;
+      transform-origin: bottom center;
+      transition: scale 300ms ease-out;
     }
     .logo svg {
       height: 8vh;
+    }
+    .small {
+      transform: scale(0.7);
     }
   </style>

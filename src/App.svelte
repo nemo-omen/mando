@@ -15,7 +15,7 @@
 <style>
   main {
 		display: grid;
-		grid-template-rows: 65vh 35vh;
+		grid-template-rows: 70vh 30vh;
     min-height: 100%;
 	}
 </style>

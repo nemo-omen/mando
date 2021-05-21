@@ -21,7 +21,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border-top: 1px solid var(--primary-darker);
-    max-height: 35vh;
+    max-height: 30vh;
   }
   .control-pane {
     height: 100%;

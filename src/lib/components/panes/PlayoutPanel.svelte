@@ -17,8 +17,13 @@
       {/if}
     </section>
     <section id="transition" class="control-pane">
-      <Logo />
-      <ConnectionControl />
+      <div class="transition-control flex {$connectionService.matches('connected') ? 'flex-3' : 'flex-1'}">
+
+      </div>
+      <div class="connection-control flex {$connectionService.matches('connected') ? 'flex-1' : 'flex-3'}">
+        <Logo />
+        <ConnectionControl />
+      </div>
     </section>
     <section id="program" class="control-pane">
       {#if $connectionService.matches('connected')}
@@ -27,7 +32,7 @@
       </div>
       {/if}
     </section>
-  {:else}
+  {:else} <!--Not studio mode-->
     <section id="program" class="control-pane vertical">
       <div class="playout-display" transition:scale></div>
     </section>
@@ -36,7 +41,7 @@
 
 <style>
   .control-panel {
-    max-height: 65vh;
+    max-height: 70vh;
     position: relative;
     display: grid;
     background: var(--blackish-dark);
@@ -53,5 +58,18 @@
     width: 100%;
     background-color: var(--blackish-darker);
     aspect-ratio: 16 / 9;
+  }
+  .flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: flex 300ms ease-out;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-3 {
+    flex: 3;
   }
 </style>
