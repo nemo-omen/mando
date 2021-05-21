@@ -59,10 +59,6 @@
     window.localStorage.setItem('addressHistory', JSON.stringify(addressHistory));
   }
 
-  function scaleInput() {
-    input.style.maxWidth = $connectionService.value !== 'connected' ? 100 + "%" : 0;
-  }
-
   onMount(() => {
     savedAddress = window.localStorage.getItem('lastAddress');
     let lsHistory = JSON.parse(window.localStorage.getItem('addressHistory'));
@@ -72,11 +68,6 @@
     if(savedAddress !== undefined || savedAddress !== null) {
       address = savedAddress;
     }
-    scaleInput();
-  });
-
-  afterUpdate(() => {
-    scaleInput();
   });
 
   connectionService.onTransition((state) => {
