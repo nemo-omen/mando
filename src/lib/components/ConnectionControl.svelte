@@ -210,10 +210,11 @@
     padding: 0.5rem 0;
     transform-origin: top center;
     transition: all 300ms ease-out;
-    margin: 1rem auto;
+    margin: 1rem auto 0 auto;
   }
   .scaled {
     width: 70%;
+    padding: 0.25rem;
     margin-top: 0;
   }
   .connected {
