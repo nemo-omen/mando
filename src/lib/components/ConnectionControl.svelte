@@ -60,9 +60,7 @@
   }
 
   function scaleInput() {
-    input.style.maxHeight = $connectionService.value !== 'connected' ? (input.scrollHeight + 16) + "px" : 0;
-    input.style.paddingTop = $connectionService.value !== 'connected' ? (0.5) + "rem" : 0;
-    input.style.paddingBottom = $connectionService.value !== 'connected' ? (0.5) + "rem" : 0;
+    input.style.maxWidth = $connectionService.value !== 'connected' ? 100 + "%" : 0;
   }
 
   onMount(() => {
@@ -104,9 +102,9 @@
 
 </script>
 
-<section class="control vertical">
+<section class="control">
   
-  <form on:submit|preventDefault={connectionToggle} class="vertical">
+  <form on:submit|preventDefault={connectionToggle} class="horizontal">
     <div class="input-group" bind:this={input}>
       <input 
       id="address-input"
@@ -134,7 +132,7 @@
         bind:value={password} >
       </div>
         
-      <button class="{$connectionService.value.toString()} {$connectionService.value === 'connected' ? 'scaled' : ''}">
+      <button class="{$connectionService.value.toString()}">
         {#if $connectionService.matches('inactive')}
         Connect
         {:else if $connectionService.matches('connected')}
@@ -146,15 +144,6 @@
 
     </form>
 
-    <!-- {#if $connectionService.matches('connected')}
-    <div class="system-info horizontal">
-      {#if $stats["cpu-usage"] !== undefined}
-      <SystemInfo stat={$stats["cpu-usage"].toFixed(2) + "%"} statName="CPU" />
-      <SystemInfo stat={$stats["fps"].toFixed(2)} statName="FPS" />
-      {/if}
-    </div>
-    {/if} -->
-
   </section>
 
 
@@ -163,59 +152,30 @@
     --border: 1px solid var(--secondary-darker);
     --borderFocusColor: var(--secondary-dark);
     --background: var(--blackish-light);
-    margin-top: 1rem;
   }
-  .vertical {
-    display: flex;
-    flex-direction: column;
-  }
-  .horizontal {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .input-group {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 300ms ease-out, padding 300ms ease-out;
-    padding: 0 2px;
-  }
-
-  .input-group > * + * {
-    margin-top: 1rem;
-  }
-
   .system-info {
     border-top: 1px solid var(--secondary-darker);
-    padding-top: 1rem;
+  }
+  form {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas: "input submit";
+    grid-gap: 1rem;
   }
 
-  form > * + * {
-    margin-top: 1rem;
-  }
-
-  .control-input {
+  .input-group {
+    transition: max-width 300ms ease-out, padding 300ms ease-out;
     display: flex;
-    justify-content: flex-end;
     gap: 1rem;
     grid-area: input;
-  }
-  .control-submit {
-    display: flex;
-    grid-area: submit;
-    min-width: 130px;
+    transform-origin: 100% 50%;
   }
   button {
     width: 100%;
-    padding: 0.5rem 0;
+    height: 100%;
     transform-origin: top center;
     transition: all 300ms ease-out;
-    margin: 1rem auto 0 auto;
-  }
-  .scaled {
-    width: 70%;
-    padding: 0.25rem;
-    margin-top: 0;
+    grid-area: submit;
   }
   .connected {
     background-color: var(--secondary-darker);

@@ -55,6 +55,10 @@ body {
   grid-template-rows: auto 1fr;
   color: var(--whitish);
 }
+#app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
 
 input {
   background-color: var(--blackish-light);

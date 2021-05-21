@@ -21,9 +21,9 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border-top: 1px solid var(--primary-darker);
-    max-height: 30vh;
+    max-height: 100%;
   }
   .control-pane {
-    height: 100%;
+    /* height: 100%; */
   }
 </style>

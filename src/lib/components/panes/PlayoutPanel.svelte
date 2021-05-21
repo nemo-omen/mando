@@ -7,9 +7,9 @@
   let studioMode = true;
 </script>
 
-<section class="control-panel" style="{studioMode ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-rows: 1fr'}">
+<section class="playout-panel" style="{studioMode ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-rows: 1fr'}">
   {#if studioMode}
-  <section id="preview" class="control-pane">
+  <section id="preview" class="control-pane monitor">
       {#if $connectionService.matches('connected')}
       <div class="playout-display" transition:scale>
         <Monitor role="preview" />
@@ -17,15 +17,19 @@
       {/if}
     </section>
     <section id="transition" class="control-pane">
-      <div class="transition-control flex {$connectionService.matches('connected') ? 'flex-3' : 'flex-1'}">
-
+      <div class="connection-control flex">
+        <!-- <Logo />
+        <ConnectionControl /> -->
       </div>
-      <div class="connection-control flex {$connectionService.matches('connected') ? 'flex-1' : 'flex-3'}">
+      <!-- <div class="connection-control flex {$connectionService.matches('connected') ? 'flex-1' : 'flex-3'}">
         <Logo />
         <ConnectionControl />
-      </div>
+      </div> -->
+      <!-- <div class="transition-control flex {$connectionService.matches('connected') ? 'flex-3' : 'flex-1'}">
+
+      </div> -->
     </section>
-    <section id="program" class="control-pane">
+    <section id="program" class="control-pane monitor">
       {#if $connectionService.matches('connected')}
       <div class="playout-display" transition:scale>
         <Monitor role="program" />
@@ -40,22 +44,23 @@
 </section>
 
 <style>
-  .control-panel {
-    max-height: 70vh;
-    position: relative;
+  .playout-panel {
     display: grid;
     background: var(--blackish-dark);
+    padding: 3rem;
   }
   .control-pane {
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    padding: 2rem;
+  }
+  .monitor {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
   }
   .playout-display {
-    max-height: 40vh;
-    width: 100%;
     background-color: var(--blackish-darker);
     aspect-ratio: 16 / 9;
   }
