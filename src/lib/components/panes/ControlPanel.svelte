@@ -7,9 +7,9 @@
 
   function toggleStudioMode() {
     if($studioModeService.matches('studio')) {
-      studioModeService.send('STUDIO_OFF');
+      studioModeService.send('TOGGLE_STUDIO_OFF');
     } else {
-      studioModeService.send('STUDIO_ON');
+      studioModeService.send('TOGGLE_STUDIO_ON');
     }
   }
 </script>

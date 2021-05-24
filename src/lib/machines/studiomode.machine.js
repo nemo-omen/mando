@@ -2,9 +2,13 @@ import { Machine, interpret, forwardTo, assign } from "xstate";
 import { inspect } from '@xstate/inspect';
 import { obs, studioMode } from '../services/obs.service.js';
 
-inspect({
-  iframe: false
-});
+function enableStudioMode() {
+  obs.send('EnableStudioMode');
+}
+
+function disableStudioMode() {
+  obs.send('DisableStudioMode');
+}
 
 const studioModeMachine = Machine({
   id: 'studioMode',
@@ -18,8 +22,14 @@ const studioModeMachine = Machine({
         INIT: {
           actions: forwardTo('check-studio'),
         },
+        TOGGLE_STUDIO_ON: {
+          target: 'studio_toggle',
+        },
         STUDIO_ON: {
           target: 'studio'
+        },
+        TOGGLE_STUDIO_OFF: {
+          target: 'program_toggle',
         },
         STUDIO_OFF: {
           target: 'program'
@@ -32,38 +42,49 @@ const studioModeMachine = Machine({
       {
         id: 'check-studio',
         src: 'checkStudioMode'
-      },
-      {
-        id: 'disable-studio',
-        src: 'disableStudioMode'
-      },
-      {
-        id: 'enable-studio',
-        src: 'enableStudioMode'
       }
     ]
     },
+    studio_toggle: {
+      invoke: {
+        id: 'enable-studio',
+        src: (event, context) => enableStudioMode,
+      },
+      on: {
+        STUDIO_ON: {
+          target: 'studio'
+        }
+      }
+    },
     studio: {
       on: {
-        entry: {
-          actions: forwardTo('enable-studio')
+        TOGGLE_STUDIO_OFF: {
+          target: 'program_toggle'
         },
         STUDIO_OFF: {
-          target: 'program'
+          target: 'program',
         },
         EXIT: {
           target: 'idle'
         }
       },
-      invoke: {
-        id: 'enable-studio',
-        src: 'enableStudioMode'
+    },
+    program_toggle: {
+      invoke: 
+      {
+        id: 'disable-studio',
+        src: (context, event) => disableStudioMode,
+      },
+      on: {
+        STUDIO_OFF: {
+          target: 'program'
+        },
       }
     },
     program: {
       on: {
-        entry: {
-          actions: forwardTo('disable-studio')
+        TOGGLE_STUDIO_ON: {
+          target: 'studio_toggle'
         },
         STUDIO_ON: {
           target: 'studio'
@@ -72,18 +93,13 @@ const studioModeMachine = Machine({
           target: 'idle'
         }
       },
-      invoke: [
-        {
-          id: 'disable-studio',
-          src: 'disableStudioMode'
-        }
-      ]
     },
   }
 },{
   services: {
-    checkStudioMode: () => (send, onReceive) => {
+    checkStudioMode: (event, context) => (send, onReceive) => {
       onReceive((event) => {
+        console.log('Check studio mode context: ', context);
         if(event.type === 'INIT') {
           obs.send('GetStudioModeStatus')
             .then((data) => {
@@ -103,17 +119,27 @@ const studioModeMachine = Machine({
       });
     },
     disableStudioMode: () => (send, onReceive) => {
-      onReceive((event, context) => {
+        console.log('Studio mode toggled');
+        
         obs.send('DisableStudioMode');
-      });
     },
     enableStudioMode: () => (send, onReceive) => {
       onReceive((event) => {
+        console.log('Studio mode toggled');
+        
         obs.send('EnableStudioMode');
       }); 
+    },
+    toggleStudioMode: () => (send, onReceive) => {
+      onReceive((event) => {
+        console.log('Studio mode toggled');
+        
+        obs.send('ToggleStudioMode');
+      });
     }
   }
 });
 
 const studioModeService = interpret(studioModeMachine, {devtools: true}).start();
+
 export { studioModeService };
