@@ -50,6 +50,7 @@
     display: grid;
     background: var(--blackish-dark);
     padding: 3rem;
+    max-height: 100%;
   }
   .control-pane {
     display: flex;
