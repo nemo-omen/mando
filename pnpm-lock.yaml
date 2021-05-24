@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@streamdasher/obs-websocket-js': ^5.0.2
   '@sveltejs/vite-plugin-svelte': ^1.0.0-next.7
+  '@xstate/inspect': ^0.4.1
   nanoid: ^3.1.23
   obs-websocket-js: ^4.0.2
   set-interval: ^2.1.2
@@ -14,6 +15,7 @@ specifiers:
 
 dependencies:
   '@streamdasher/obs-websocket-js': 5.0.2
+  '@xstate/inspect': 0.4.1
   nanoid: 3.1.23
   obs-websocket-js: 4.0.2
   set-interval: 2.1.2
@@ -72,6 +74,14 @@ packages:
       - rollup
       - supports-color
     dev: true
+
+  /@xstate/inspect/0.4.1:
+    resolution: {integrity: sha512-tcGBUCVymP8ij0K2fXZckrwrQkmNJL1DgQAM0eSILQKb8iBDN3GeqhYkNCS4HP29EzF2TZL0+k74FPWKaU9Fhw==}
+    peerDependencies:
+      ws: ^7.3.1
+    dependencies:
+      fast-safe-stringify: 2.0.7
+    dev: false
 
   /ansi-styles/4.3.0:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
@@ -136,6 +146,10 @@ packages:
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
     dev: true
+
+  /fast-safe-stringify/2.0.7:
+    resolution: {integrity: sha512-Utm6CdzT+6xsDk2m8S6uL8VHxNwI6Jub+e9NYTcAms28T84pTa25GJQV9j0CY0N1rM8hK4x6grpF2BQf+2qwVA==}
+    dev: false
 
   /fsevents/2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}

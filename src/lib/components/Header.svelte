@@ -5,15 +5,16 @@
 </script>
 
 <header>
-		<a href="/">
+		<a href="/" class="brand">
 			<Logo />
+			<h1>MANDO</h1>
 		</a>
 	<ConnectionControl />
 </header>
 
 <style>
 	header {
-		padding: 1rem;
+		padding: 0 1rem;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		justify-items: end;
@@ -21,11 +22,26 @@
 		align-items: center;
 		border-bottom: 1px solid var(--primary);
 	}
-	a {
+	.brand {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		justify-self: start;
 		transform: scale(1);
-		transition: transform 200ms ease-out;
+		transition: color 200ms ease-out;
+		color: var(--secondary);
+		text-decoration: none;
+		font-size: 4vh;
+		padding: 0;
+		margin: 0;
 	}
-	a:hover {
-		transform: scale(1.2);
+	.brand:hover {
+		color: var(--primary);
+	}
+	.brand h1 {
+		font-weight: 600;
+		margin: 0;
+		padding: 0;
+		letter-spacing: 14px;
 	}
 </style>

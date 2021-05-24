@@ -1,45 +1,25 @@
 <script>
-  import { fade } from 'svelte/transition';
-  import { quintInOut } from 'svelte/easing';
-  import {  obs, 
-            currentScene,
-            previewScene, 
-            startScreenshotPolling, 
-            stopScreenshotPolling, 
-            previewScreenshot,
-            programScreenshot
-          } from '../services/obs.service.js';
-  import { connectionService } from '../machines/connection.machine.js';
-
+  import { onMount } from 'svelte';
+  import { currentScene, previewScene, obs } from '../services/obs.service.js';
   export let role;
-  $:screenshot = role === 'preview' ? $previewScreenshot : $programScreenshot;
 
-  connectionService.onTransition((state) => {
-    if(state.value === 'connected') {
-        startScreenshotPolling(role);
-      } else {
-        stopScreenshotPolling(role);
-      }
-  });
-
-
-
+  $:sceneTitle = role === 'preview' ? $previewScene.name : $currentScene.name;
 </script>
 
 <div class="monitor">
-  <img src={screenshot} alt="{role} screenshot">
-</div>
-<div class="monitor-title">
-  {#if role === 'preview'}
-  <h3 transition:fade={{duration: 200, easing: quintInOut}}>{$previewScene.name || ""}</h3>
-  {:else if role === 'program'}
-  <h3 transition:fade={{duration: 200, easing: quintInOut}}>{$currentScene.name || ""}</h3>
-  {/if}
+  <svg viewBox="0 0 1920 1080" fill-rule="evenodd" clip-rule="evenodd">
+    <rect width="1920" height="1080"></rect>
+  </svg>
 </div>
 
+<h3 class="monitor-title">{sceneTitle === undefined ? '' : sceneTitle}</h3>
+
 <style>
-  img {
-    width: 100%;
+  .monitor {
+    color: var(--blackish-darker);
+    background-color: var(--blackish-darker);
+    aspect-ratio: 16 / 9;
+    fill: currentColor;
   }
   .monitor-title {
     margin-top: 1rem;

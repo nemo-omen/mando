@@ -2,14 +2,14 @@
   import '$lib/css/global.css';
   import Header from '$lib/components/Header.svelte';
   import PlayoutPanel from '$lib/components/panes/PlayoutPanel.svelte';
-  import ControlPanel from '$lib/components/panes/ControlPanel.svelte';
+  import BottomPanel from '$lib/components/panes/BottomPanel.svelte';
 </script>
 
 <Header />
 
 <main>
   <PlayoutPanel />
-  <ControlPanel />
+  <BottomPanel />
 </main>
 
 <style>

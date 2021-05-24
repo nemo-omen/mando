@@ -1,9 +1,9 @@
 <script>
-  import { afterUpdate, onMount } from 'svelte';
+  import { afterUpdate, onMount, onDestroy } from 'svelte';
   import { fade, fly } from 'svelte/transition';
   import { quintInOut } from 'svelte/easing';
   import { connectionService } from '../machines/connection.machine.js';
-  import { stats } from '../services/obs.service.js';
+  import { obs, stats } from '../services/obs.service.js';
   // import SystemInfo from './SystemInfo.svelte';
 
   let address = "";
@@ -68,6 +68,10 @@
     if(savedAddress !== undefined || savedAddress !== null) {
       address = savedAddress;
     }
+  });
+
+  onDestroy(() => {
+    obs.disconnect();
   });
 
   connectionService.onTransition((state) => {

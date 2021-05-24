@@ -15,7 +15,7 @@
   $:locked = source.locked;
 
   $:displayName = "";
-  $: sourceSettings = {};
+  $:sourceSettings = {};
 
   let sourceItem;
   let summary;
@@ -41,7 +41,7 @@
   async function getSourceSettings() {
     const data = await obs.send('GetSourceSettings', {sourceName: source.name, sourceType: source.type});
     sourceSettings = await data.sourceSettings;
-    console.log("Source settings: ", sourceSettings);
+    // console.log("Source settings: ", sourceSettings);
   }
   
   onMount(async () => {
@@ -51,6 +51,7 @@
   
   afterUpdate(() => {
     getDisplayName();
+    getSourceSettings();
   });
 
 </script>
@@ -149,6 +150,9 @@
     justify-content: space-between;
     gap: 1rem;
     cursor: pointer;
+  }
+  .source-card-body {
+    padding: 0.5rem 0;
   }
   .source-settings {
     border: 1px solid var(--secondary-dark);

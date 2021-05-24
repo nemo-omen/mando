@@ -7,6 +7,7 @@ export let obs = new OBSWebSocket();
 
 export let stats = writable({});
 export let sceneList = writable([]);
+export let studioMode = writable(false);
 export let currentScene = writable({});
 export let previewScene = writable({});
 export let sourceTypeNames = writable([]);
@@ -21,7 +22,6 @@ function initData() {
   getScenes();
   checkSceneState();
   getSourceTypes();
-  // obs.send('GetVersion').then((data) => console.log(data)).catch((error) => console.error(error));
 }
 
 function getScenes() {
@@ -52,52 +52,6 @@ function pollStats() {
   });
 }
 
-export async function startScreenshotPolling(role) {
-  const versionData = await obs.send('GetVersion');
-  console.log(versionData);
-  const formats = await versionData["supported-image-export-formats"];
-  console.log(formats);
-  if(formats.includes('jpg')) {
-    SetInterval.start(() => pollScreenshots(role, 'jpg'), 50, `${role}-screenshot-polling`);
-  }else {
-    SetInterval.start(() => pollScreenshots(role, 'png'), 50, `${role}-screenshot-polling`);
-  }
-  pollScreenshots(role)
-}
-
-export function stopScreenshotPolling(role) {
-  SetInterval.clear(`${role}-screenshot-polling`);
-}
-
-async function pollScreenshots(role, format) {
-  if(role === 'preview') {
-    const preview = get(previewScene);
-    const data = await obs.send('TakeSourceScreenshot', 
-      {
-        sourceName: preview.name,
-        embedPictureFormat: format,
-        compressionQuality: 25,
-        width: 640,
-        height: 360
-      });
-    previewScreenshot.set(await data.img);
-  } else if(role === 'program') {
-    const program = get(currentScene);
-    const data = await obs.send('TakeSourceScreenshot', 
-      {
-        // sourceName: program.name,
-        embedPictureFormat: format,
-        compressionQuality: 25,
-        width: 640,
-        height: 360
-      });
-    programScreenshot.set(await data.img);
-  } else {
-    return '';
-  }
-}
-
-
 async function getSourceTypes() {
   const data = await obs.send('GetSourceTypesList');
   const types = await data.types;
@@ -112,26 +66,27 @@ async function getSourceTypes() {
 }
 
 export async function checkSceneState() {
+  if(get(studioMode) === true) {
+    checkPreview();
+  }
   checkProgram();
-  checkPreview();
 }
 
 async function checkProgram() {
   const program = await obs.send('GetCurrentScene');
   currentScene.set({name: program.name, sources: [...program.sources]});
-  console.log('Current scene: ', get(currentScene));
+  // console.log('Current scene: ', get(currentScene));
 }
 
 async function checkPreview() {
-  const preview = await obs.send('GetPreviewScene');
-
-  // set store to empty object to clear ui objects
-  previewScene.set({});
-
-  // timeout delay to allow source ui elements to transition out
-  setTimeout(() => {
-    previewScene.set({name: preview.name, sources: [...preview.sources]});
-  }, 300);
+  obs.send('GetPreviewScene')
+    .then((data) => {
+      previewScene.set({});
+      setTimeout(() => {
+        previewScene.set({name: data.name, sources: [...data.sources]});
+      }, 300);
+    })
+    .catch((error) => previewScene.set({}));
 }
 
 obs.on('ConnectionOpened', async (data) => {
@@ -174,4 +129,11 @@ obs.on('SwitchScenes', (data) => {
 
 obs.on("PreviewSceneChanged", (data) => {
   checkSceneState();
-})
+});
+
+obs.on('StudioModeSwitched', (data) => {
+  studioMode.set(data.newState);
+  if(data.newState = true) {
+    checkSceneState();
+  }
+});

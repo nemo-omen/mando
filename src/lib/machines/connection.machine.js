@@ -6,7 +6,7 @@ const connectionMachine = Machine({
   initial: "inactive",
   states: {
     inactive: { 
-      on: { 
+      on: {
         CONNECT: { 
           actions: forwardTo('obs-connect'),
         },
@@ -49,7 +49,7 @@ const connectionMachine = Machine({
     obsConnect: () => (send, onReceive) => {
       onReceive((event) => {
         if(event.type === 'CONNECT') {
-          console.log(`address: ${event.address}, password: ${event.password}`);
+          // console.log(`address: ${event.address}, password: ${event.password}`);
           obs.connect({address: event.address, password: event.password}).then(() => send('CONNECTED')).catch((error) => {
             if(error.code === 'CONNECTION_ERROR') {
                 send('CONNECTION_FAILED');

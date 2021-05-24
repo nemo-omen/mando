@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@streamdasher/obs-websocket-js": "^5.0.2",
+    "@xstate/inspect": "^0.4.1",
     "nanoid": "^3.1.23",
     "obs-websocket-js": "^4.0.2",
     "set-interval": "^2.1.2",

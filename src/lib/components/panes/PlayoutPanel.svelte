@@ -1,15 +1,23 @@
 <script>
-  import Monitor from '../Monitor.svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { scale } from 'svelte/transition';
   import { connectionService } from '../../machines/connection.machine.js';
-  import ConnectionControl from '../ConnectionControl.svelte';
-  import Logo from '../Logo.svelte';
-  let studioMode = true;
+  import { studioModeService } from '../../machines/studiomode.machine.js';
+  import Monitor from '../Monitor.svelte';
+  import { obs } from '../../services/obs.service.js';
+
+  afterUpdate(() => {
+    if($connectionService.matches('connected')) {
+      if($studioModeService.matches('idle')) {
+        studioModeService.send('INIT');
+      }
+    }
+  })
 </script>
 
-<section class="playout-panel" style="{studioMode ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-rows: 1fr'}">
-  {#if studioMode}
-  <section id="preview" class="control-pane monitor">
+<section class="playout-panel" style="{$studioModeService.matches('studio') ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-rows: 1fr'}">
+  {#if $studioModeService.matches('studio')}
+  <section id="preview" class="monitor-pane">
       {#if $connectionService.matches('connected')}
       <div class="playout-display" transition:scale>
         <Monitor role="preview" />
@@ -17,28 +25,22 @@
       {/if}
     </section>
     <section id="transition" class="control-pane">
-      <div class="connection-control flex">
-        <!-- <Logo />
-        <ConnectionControl /> -->
-      </div>
-      <!-- <div class="connection-control flex {$connectionService.matches('connected') ? 'flex-1' : 'flex-3'}">
-        <Logo />
-        <ConnectionControl />
-      </div> -->
-      <!-- <div class="transition-control flex {$connectionService.matches('connected') ? 'flex-3' : 'flex-1'}">
-
-      </div> -->
+      <!-- More Control stuff here!-->
     </section>
-    <section id="program" class="control-pane monitor">
+    <section id="program" class="monitor-pane">
       {#if $connectionService.matches('connected')}
       <div class="playout-display" transition:scale>
         <Monitor role="program" />
       </div>
       {/if}
     </section>
-  {:else} <!--Not studio mode-->
-    <section id="program" class="control-pane vertical">
-      <div class="playout-display" transition:scale></div>
+    {:else} <!--Not studio mode-->
+    <section id="program" class="monitor-pane">
+      {#if $connectionService.matches('connected')}
+      <div class="playout-display" transition:scale>
+        <Monitor role="program" />
+      </div>
+      {/if}
     </section>
     {/if}
 </section>
@@ -54,27 +56,5 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-  }
-  .monitor {
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-  }
-  .playout-display {
-    background-color: var(--blackish-darker);
-    aspect-ratio: 16 / 9;
-  }
-  .flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    transition: flex 300ms ease-out;
-  }
-  .flex-1 {
-    flex: 1;
-  }
-  .flex-3 {
-    flex: 3;
   }
 </style>
