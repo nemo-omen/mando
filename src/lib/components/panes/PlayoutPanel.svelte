@@ -49,11 +49,11 @@
   });
 </script>
 
-<section class="playout-panel" style="{$studioModeService.matches('studio') ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-rows: 1fr'}">
+<section class="playout-panel" style="{$studioModeService.matches('studio') ? 'grid-template-columns: 4fr 1fr 4fr' : 'grid-template-columns: 1fr'}">
   {#if $studioModeService.matches('studio')}
   {#if $connectionService.matches('connected')}
   <section id="preview" class="monitor-pane">
-      <div class="playout-display" transition:scale>
+      <div class="playout-display">
         <Monitor role="preview" />
       </div>
     </section>
@@ -63,7 +63,7 @@
     </section>
     {#if $connectionService.matches('connected')}
     <section id="program" class="monitor-pane">
-      <div class="playout-display" transition:scale>
+      <div class="playout-display">
         <Monitor role="program" />
       </div>
     </section>
@@ -71,7 +71,7 @@
     {:else} <!--Not studio mode-->
     {#if $connectionService.matches('connected')}
     <section id="program" class="monitor-pane">
-      <div class="playout-display" transition:scale>
+      <div class="playout-display">
         <Monitor role="program" />
       </div>
     </section>
@@ -84,7 +84,11 @@
     display: grid;
     background: var(--blackish-dark);
     padding: 3rem;
-    max-height: 100%;
+    /* max-height: 100%; */
+  }
+  .monitor-pane {
+    display: flex;
+    justify-content: center;
   }
   .control-pane {
     display: flex;

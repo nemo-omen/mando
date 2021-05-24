@@ -20,6 +20,7 @@
     background-color: var(--blackish-darker);
     aspect-ratio: 16 / 9;
     fill: currentColor;
+    max-height: 45vh;
   }
   .monitor-title {
     margin-top: 1rem;
