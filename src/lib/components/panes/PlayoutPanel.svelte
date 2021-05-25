@@ -22,14 +22,6 @@
     console.log('Studiomodeservice transition: ', state.value);
   });
 
-  // afterUpdate(() => {
-  //   if($connectionService.matches('connected')) {
-  //     if($studioModeService.matches('idle')) {
-  //       studioModeService.send('INIT');
-  //     }
-  //   }
-  // });
-
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 300),
 
