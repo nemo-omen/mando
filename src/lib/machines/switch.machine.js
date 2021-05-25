@@ -37,7 +37,7 @@ const switchMachine = Machine({
               console.error(error);
             });
           } else {
-            obs.send('SetScene', {"scene-name": event.name})
+            obs.send('SetCurrentScene', {"scene-name": event.name})
             send('PROGRAM');
           }
         })

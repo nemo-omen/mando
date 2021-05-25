@@ -32,7 +32,6 @@
 
   onMount(async () => {
     selected = isPreview;
-    // console.log("Current scene", $currentScene);
   })
 
 </script>

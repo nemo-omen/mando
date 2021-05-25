@@ -1,6 +1,7 @@
 import OBSWebSocket  from 'obs-websocket-js/dist/obs-websocket.js';
 import SetInterval from 'set-interval';
 import { connectionService } from '../machines/connection.machine.js';
+import { studioModeService } from '../machines/studiomode.machine.js';
 import { writable, get } from 'svelte/store';
 
 export let obs = new OBSWebSocket();
@@ -18,10 +19,15 @@ export let programScreenshot = writable("");
 let pollingInterval = undefined;
 
 function initData() {
+  checkStudioModeStatus();
   startStatPolling();
-  getScenes();
   checkSceneState();
+  getScenes();
   getSourceTypes();
+}
+
+function checkStudioModeStatus() {
+  studioModeService.send('INIT');
 }
 
 function getScenes() {
@@ -32,14 +38,6 @@ function getScenes() {
   .catch((error) => {
     console.error(error);
   });
-}
-
-function startStatPolling() {
-  SetInterval.start(pollStats, 1000, 'statPolling');
-}
-
-function stopStatPolling() {
-  SetInterval.clear('statPolling');
 }
 
 function pollStats() {
@@ -87,6 +85,14 @@ async function checkPreview() {
       }, 300);
     })
     .catch((error) => previewScene.set({}));
+}
+
+function startStatPolling() {
+  SetInterval.start(pollStats, 1000, 'statPolling');
+}
+
+function stopStatPolling() {
+  SetInterval.clear('statPolling');
 }
 
 obs.on('ConnectionOpened', async (data) => {

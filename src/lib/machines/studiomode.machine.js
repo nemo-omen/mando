@@ -1,3 +1,4 @@
+import { get } from "svelte/store";
 import { Machine, interpret, forwardTo, assign } from "xstate";
 import { inspect } from '@xstate/inspect';
 import { obs, studioMode } from '../services/obs.service.js';
@@ -103,38 +104,34 @@ const studioModeMachine = Machine({
         if(event.type === 'INIT') {
           obs.send('GetStudioModeStatus')
             .then((data) => {
-              console.log('Studio mode data: ', data);
               if(data.studioMode === true) {
                 send('STUDIO_ON');
               } else {
                 send('STUDIO_OFF');
               }
+              studioMode.set(data.studioMode);
             })
             .catch((error) => {
               console.error(error);
-              // context.studioMode = false;
-              // send('STUDIO_OFF');
             });
         }
       });
     },
     disableStudioMode: () => (send, onReceive) => {
         console.log('Studio mode toggled');
-        
         obs.send('DisableStudioMode');
-    },
-    enableStudioMode: () => (send, onReceive) => {
-      onReceive((event) => {
-        console.log('Studio mode toggled');
-        
-        obs.send('EnableStudioMode');
+        studioMode.set(false);
+      },
+      enableStudioMode: () => (send, onReceive) => {
+        onReceive((event) => {
+          obs.send('EnableStudioMode');
+          studioMode.set(true);
       }); 
     },
     toggleStudioMode: () => (send, onReceive) => {
       onReceive((event) => {
-        console.log('Studio mode toggled');
-        
         obs.send('ToggleStudioMode');
+        studioMode.set(!get(studioMode));
       });
     }
   }
