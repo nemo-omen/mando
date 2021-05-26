@@ -4,6 +4,7 @@ import { connectionService } from '../machines/connection.machine.js';
 import { studioModeService } from '../machines/studiomode.machine.js';
 import { statsService } from '../machines/stats.machine.js';
 import { writable, get } from 'svelte/store';
+import { monitorService } from '../machines/monitor.machine.js';
 
 export let obs = new OBSWebSocket();
 
@@ -122,6 +123,7 @@ obs.on('ConnectionClosed', () => {
   if(connectionService.state.value !== 'disconnected') {
     connectionService.send('DISCONNECTED');
     statsService.send('STOP_POLLING');
+    monitorService.send('STOP_POLLING');
   }
 });
 
@@ -130,7 +132,7 @@ obs.on('AuthenticationFailure', () => {
 });
 
 obs.on('error', (error) => {
-  console.error('OBS WebSocker error: ', error);
+  console.error('OBS WebSocket error: ', error);
 });
 
 obs.on('SwitchScenes', (data) => {
