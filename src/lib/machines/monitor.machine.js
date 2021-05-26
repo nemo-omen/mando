@@ -26,6 +26,7 @@ const monitorMachine = Machine({
   {
     activities: {
       polling: (context, event) => {
+        console.log(event);
         const interval = setInterval(async() => {
           const imgData = await obs.send('TakeSourceScreenshot', {
             sourceName: event.sourceName,
@@ -33,9 +34,7 @@ const monitorMachine = Machine({
             width: 640,
             height: 360
           });
-          console.log('Image data: ', await imgData);
           if(!imgData.error) {
-            console.log(imgData.img);
             context.screenshot = await imgData.img;
             if(event.role === 'preview') {
               previewScreenshot.set(imgData.img);

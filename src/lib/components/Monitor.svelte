@@ -9,9 +9,9 @@
 
   onMount(() => {
     monitorService.send({
-      role,
-      type: 'POLL', 
-      sourceName: sceneTitle
+      type: 'POLL',
+      sourceName: role === 'preview' ? $previewScene.name : $currentScene.name,
+      role: role
     });
   });
 
