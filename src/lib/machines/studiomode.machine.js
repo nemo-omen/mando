@@ -137,6 +137,6 @@ const studioModeMachine = Machine({
   }
 });
 
-const studioModeService = interpret(studioModeMachine, {devtools: true}).start();
+const studioModeService = interpret(studioModeMachine).start();
 
 export { studioModeService };

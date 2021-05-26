@@ -2,6 +2,7 @@ import OBSWebSocket  from 'obs-websocket-js/dist/obs-websocket.js';
 import SetInterval from 'set-interval';
 import { connectionService } from '../machines/connection.machine.js';
 import { studioModeService } from '../machines/studiomode.machine.js';
+import { statsService } from '../machines/stats.machine.js';
 import { writable, get } from 'svelte/store';
 
 export let obs = new OBSWebSocket();
@@ -20,7 +21,7 @@ let pollingInterval = undefined;
 
 function initData() {
   checkStudioModeStatus();
-  startStatPolling();
+  // startStatPolling();
   checkSceneState();
   getScenes();
   getSourceTypes();
@@ -40,10 +41,12 @@ function getScenes() {
   });
 }
 
-function pollStats() {
+export function pollStats() {
+  
   obs.send('GetStats')
   .then((data) => {
     stats.set(data.stats);
+    return data.stats;
   })
   .catch((error) => {
     console.error(error);
@@ -118,6 +121,7 @@ obs.on('ConnectionClosed', () => {
   stopStatPolling();
   if(connectionService.state.value !== 'disconnected') {
     connectionService.send('DISCONNECTED');
+    statsService.send('STOP_POLLING');
   }
 });
 
