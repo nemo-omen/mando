@@ -4,7 +4,8 @@ import { connectionService } from '../machines/connection.machine.js';
 import { studioModeService } from '../machines/studiomode.machine.js';
 import { statsService } from '../machines/stats.machine.js';
 import { writable, get } from 'svelte/store';
-import { monitorService } from '../machines/monitor.machine.js';
+import { programService } from '../machines/program.machine.js';
+import { previewService } from '../machines/preview.machine.js';
 
 export let obs = new OBSWebSocket();
 
@@ -123,7 +124,8 @@ obs.on('ConnectionClosed', () => {
   if(connectionService.state.value !== 'disconnected') {
     connectionService.send('DISCONNECTED');
     statsService.send('STOP_POLLING');
-    monitorService.send('STOP_POLLING');
+    programService.send('STOP_POLLING');
+    previewService.send('STOP_POLLING');
   }
 });
 

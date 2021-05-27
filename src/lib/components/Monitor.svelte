@@ -1,35 +1,41 @@
 <script>
   import { onMount } from 'svelte';
   import { currentScene, previewScene, obs } from '../services/obs.service.js';
-  import { monitorService } from '../machines/monitor.machine.js';
+  import { programService } from '../machines/program.machine.js';
+  import { previewService } from '../machines/preview.machine.js';
+  import { studioModeService } from '../machines/studiomode.machine.js';
   import { previewScreenshot, programScreenshot } from '../services/obs.service.js';
   export let role;
 
   $:sceneTitle = role === 'preview' ? $previewScene.name : $currentScene.name;
 
   onMount(() => {
-    monitorService.send({
-      type: 'POLL',
-      sourceName: role === 'preview' ? $previewScene.name : $currentScene.name,
-      role: role
-    });
+    programService.send('POLL');
+    previewService.send('POLL');
   });
 
-  monitorService.onTransition((state) => {
-    console.log('MonitorMachine state: ', state.value);
+  studioModeService.onTransition((state) => {
+    if(state.value === 'program' && $previewService.matches('active')) {
+      previewService.send('STOP_POLLING');
+    } else if(state.value === 'studio' && $previewService.matches('idle')) {
+      previewService.send('POLL');
+    }
   });
 </script>
 
 <div class="monitor">
-  <svg viewBox="0 0 1920 1080" fill-rule="evenodd" clip-rule="evenodd">
-    <rect width="1920" height="1080"></rect>
+  <svg viewBox="0 0 640 360" fill-rule="evenodd" clip-rule="evenodd">
+    <rect width="640" height="360"></rect>
   </svg>
-  {#if $monitorService.matches('active')}
+
   {#if role === 'preview'}
-  <img src={$previewScreenshot} alt={sceneTitle === undefined ? '' : sceneTitle} class="screenshot" width="640" height="360" />
+    {#if $previewService.matches('active')}
+    <img src={$previewScreenshot} alt={sceneTitle === undefined ? '' : sceneTitle} class="screenshot" />
+    {/if}
   {:else}
-  <img src={$programScreenshot} alt={sceneTitle === undefined ? '' : sceneTitle} class="screenshot" width="640" height="360" />
-  {/if}
+    {#if $programService.matches('active')}
+    <img src={$programScreenshot} alt={sceneTitle === undefined ? '' : sceneTitle} class="screenshot" />
+    {/if}
   {/if}
 </div>
 
@@ -51,7 +57,8 @@
   .screenshot {
     min-width: 100%;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>

@@ -1,18 +1,19 @@
-import { obs, previewScreenshot, programScreenshot } from '../services/obs.service.js';
+import { obs, programScreenshot, currentScene } from '../services/obs.service.js';
 import { Machine, interpret, forwardTo, assign } from "xstate";
 
-const monitorMachine = Machine({
-  id: 'monitor',
+const programMachine = Machine({
+  id: 'program',
   initial: 'idle',
   context: {
-    role: undefined,
     screenshot: undefined,
     error: undefined,
   },
   states: {
     idle: {
       on: {
-        POLL: { target: 'active' },
+        POLL: { 
+          target: 'active', 
+        },
       }
     },
     active: {
@@ -26,25 +27,20 @@ const monitorMachine = Machine({
   {
     activities: {
       polling: (context, event) => {
-        console.log(event);
         const interval = setInterval(async() => {
           const imgData = await obs.send('TakeSourceScreenshot', {
-            sourceName: event.sourceName,
+            sourceName: currentScene?.name,
             embedPictureFormat: 'png',
             width: 640,
             height: 360
           });
           if(!imgData.error) {
             context.screenshot = await imgData.img;
-            if(event.role === 'preview') {
-              previewScreenshot.set(imgData.img);
-            } else {
-              programScreenshot.set(imgData.img);
-            }
+            programScreenshot.set(imgData.img);
           } else {
             context.error = await imgData.error;
           }
-        }, 50);
+        }, 200);
 
         return () => clearInterval(interval);
       }
@@ -52,5 +48,5 @@ const monitorMachine = Machine({
   }
 );
 
-const monitorService = interpret(monitorMachine).start();
-export { monitorService };
+const programService = interpret(programMachine).start();
+export { programService };
