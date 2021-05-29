@@ -38,10 +38,6 @@
     });
   }
 
-  function toggleLock() {
-    source.locked = !source.locked;
-  }
-
   async function getSourceSettings() {
     const data = await obs.send('GetSourceSettings', {sourceName: source.name, sourceType: source.type});
     sourceSettings = await data.sourceSettings;
@@ -84,13 +80,6 @@
           <Icon name="eye" title="Visible" />
           {:else}
           <Icon name="eyeClosed" title="Hidden" />
-          {/if}
-        </div>
-        <div class="icon" on:click|stopPropagation={toggleLock}>
-          {#if source.locked}
-          <Icon name="lock" title="Locked" />
-          {:else}
-          <Icon name="unlock" title="Unlocked" />
           {/if}
         </div>
         <div class="icon" on:click|stopPropagation={openSettings}>
