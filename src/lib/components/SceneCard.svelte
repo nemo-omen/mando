@@ -1,8 +1,9 @@
 <script>
-  import { onMount } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
   import { fade, fly, slide } from 'svelte/transition';
   import { quintInOut } from 'svelte/easing';
   import { switchService} from '../machines/switch.machine.js';
+  import { previewService } from '../machines/preview.machine.js';
   import { obs, currentScene, previewScene, checkSceneState } from '../services/obs.service.js';
   import { selectedScene } from '../stores/ui.store.js';
   import Icon from './Icon.svelte';
@@ -19,11 +20,7 @@
     setSelected();
 
     switchService.send('PUSH', {name: scene.name});
-
-    setTimeout(() => {
-      checkSceneState();
-    }, 200);
-  }
+  };
 
   function setSelected() {
     selected = !selected;
@@ -32,7 +29,7 @@
 
   onMount(async () => {
     selected = isPreview;
-  })
+  });
 
 </script>
 

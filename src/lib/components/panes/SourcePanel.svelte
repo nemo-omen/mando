@@ -7,7 +7,7 @@
   import SourceCard from '../SourceCard.svelte';
 </script>
 <section class="source-panel">
-  {#if $studioModeService.matches('preview')}
+  {#if $studioModeService.matches('studio')}
     {#if $connectionService.matches('connected') && $previewScene.sources !== null && $previewScene.sources !== undefined}
       {#each $previewScene.sources as source}
         <div>
