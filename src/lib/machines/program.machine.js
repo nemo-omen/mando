@@ -40,7 +40,7 @@ const programMachine = Machine({
           } else {
             context.error = await imgData.error;
           }
-        }, 200);
+        }, 500);
 
         return () => clearInterval(interval);
       }
