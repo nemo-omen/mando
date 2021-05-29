@@ -6,6 +6,7 @@
   import Icon from './Icon.svelte';
 
   export let source;
+  export let parent;
   export let open = false;
 
   $:alignment = source.alignment;
@@ -13,6 +14,7 @@
   $:cy = source.cy;
   $:id= source.id;
   $:locked = source.locked;
+  $:visible = source.render;
 
   $:displayName = "";
   $:sourceSettings = {};
@@ -26,12 +28,14 @@
     })[0]?.displayName;
   }
 
-  function toggleVisible() {
-    if(!open) {
-      sourceItem.style.maxHeight = summary.scrollHeight;
-    } else {
-      sourceItem.style.maxHeight = sourceItem.scrollHeight;
-    }
+  async function toggleVisible() {
+    source.render = !source.render;
+
+    obs.send('SetSceneItemRender', {
+      "scene-name": parent,
+      source: source.name,
+      render: source.render
+    });
   }
 
   function toggleLock() {
@@ -41,7 +45,10 @@
   async function getSourceSettings() {
     const data = await obs.send('GetSourceSettings', {sourceName: source.name, sourceType: source.type});
     sourceSettings = await data.sourceSettings;
-    // console.log("Source settings: ", sourceSettings);
+  }
+
+  async function openSettings() {
+
   }
   
   onMount(async () => {
@@ -60,20 +67,8 @@
   class="source-card"
   transition:fly={{y: 2000, duration: 600, easing: quintInOut}}
   bind:this={sourceItem}
-  on:click={getSourceSettings}
   >
-  <details bind:open={open} bind:this={summary} on:click|stopPropagation={toggleVisible}>
-    <summary>
       <div class="start v-center">
-        {#if open}
-          <div class="icon before">
-            <Icon name="arrowDown" />
-          </div>
-          {:else}
-          <div class="icon before">
-            <Icon name="arrowRight" />
-          </div>
-        {/if}
         <h4 class="third">
           {source.name}
         </h4>
@@ -84,50 +79,25 @@
         {/if}
       </div>
       <div class="end v-center">
-        <div class="icon">
+        <div class="icon" on:click|stopPropagation={toggleVisible}>
           {#if source.render}
-          <Icon name="eye" />
+          <Icon name="eye" title="Visible" />
           {:else}
-          <Icon name="eyeClosed" />
+          <Icon name="eyeClosed" title="Hidden" />
           {/if}
         </div>
         <div class="icon" on:click|stopPropagation={toggleLock}>
           {#if source.locked}
-          <Icon name="lock" />
+          <Icon name="lock" title="Locked" />
           {:else}
-          <Icon name="unlock" />
+          <Icon name="unlock" title="Unlocked" />
           {/if}
+        </div>
+        <div class="icon" on:click|stopPropagation={openSettings}>
+          <Icon name="settings" title="Settings" />
         </div>
       </div>
-    </summary>
-    <section class="source-card-body" transition:slide>
-        {#each Object.entries(sourceSettings) as [key, value]}
-        <div class="source-settings">
-
-          <header class="source-settings-header">{key}</header>
-          
-          {#if typeof (value) === 'object'}
-          <div class="source-settings-list">
-            {#each Object.entries(value) as [subKey, subValue]}
-            <div class="source-setting-row">
-              <div class="source-setting">
-                {subKey}
-              </div>
-              <div class="source-setting">
-                {subValue}
-              </div>
-            </div>
-            {/each}
-          </div>
-          {:else}
-          <div class="source-setting">
-            {value}
-          </div>
-          {/if}
-        </div>
-          {/each}
-        </section>
-      </details>
+    
     </article>
 
 <style>
@@ -137,6 +107,8 @@
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
   }
   .source-card:hover {
     background-color: var(--blackish-light);
@@ -144,38 +116,6 @@
   }
   .source-card:active {
     background-color: var(--blackish-lighter);
-  }
-  summary {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    cursor: pointer;
-  }
-  .source-card-body {
-    padding: 0.5rem 0;
-  }
-  .source-settings {
-    border: 1px solid var(--secondary-dark);
-  }
-  .source-settings-header {
-    padding: 0.5rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    border-bottom: 1px solid var(--secondary-dark);
-    background-color: var(--blackish-light);
-  }
-  .source-settings-list > * + * {
-    border-top: 1px solid var(--secondary-dark);
-  }
-  .source-setting-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .source-setting-row > * + * {
-    border-left: 1px solid var(--secondary-dark);
-  }
-  .source-setting {
-    padding: 0.5rem;
   }
   .v-center {
     align-items: center;

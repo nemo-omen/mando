@@ -11,15 +11,15 @@
     {#if $connectionService.matches('connected') && $previewScene.sources !== null && $previewScene.sources !== undefined}
       {#each $previewScene.sources as source}
         <div>
-          <SourceCard {source} />
+          <SourceCard {source} parent={$previewScene.name} />
         </div>
       {/each}
     {/if}
   {:else}
     {#if $connectionService.matches('connected') && $currentScene.sources !== null && $currentScene.sources !== undefined}
-      {#each $currentScene.sources as source}
+      {#each $currentScene?.sources as source}
         <div>
-          <SourceCard {source} />
+          <SourceCard {source} parent={$currentScene?.name}/>
         </div>
       {/each}
     {/if}
